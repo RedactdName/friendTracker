@@ -6,8 +6,9 @@ import {
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { Outlet } from 'react-router-dom';
-
+import 'bootstrap/dist/css/bootstrap.css'
 import Header from './components/Header';
+import NavTabs from './components/NavTabs'
 import Footer from './components/Footer';
 
 const httpLink = createHttpLink({
@@ -35,6 +36,7 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <div className="flex-column justify-flex-start min-100-vh">
+        <NavTabs/>
         <Header />
         <div className="container">
           <Outlet />
