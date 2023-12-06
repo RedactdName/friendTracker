@@ -1,8 +1,7 @@
 import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+
 
 const apiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
 console.log(`This is the Api key${apiKey}`);

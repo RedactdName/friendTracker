@@ -8,7 +8,7 @@ import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 // import Matchup from './pages/Matchup';
 // import Vote from './pages/Vote';
-import NotFound from './pages/NotFound';
+import NotFound from './pages/NotFound.jsx';
 
 const router = createBrowserRouter([
   {
