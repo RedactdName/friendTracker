@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
 import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
-const apiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
+// const apiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
+const apiKey = "AIzaSyCkYVcXLFaRDxpnHGmxVNNqgyXdXzZ8vE0"
 console.log(`This is the Api key${apiKey}`);
 
 const mapStyles = { width: '100px', height: '400px', marginTop: '-50px' };
@@ -99,7 +98,6 @@ class Map extends Component {
           {locationMarkers}
         </GoogleMap>
         </div>
-        <ToastContainer />
       </div>
     );
   }
