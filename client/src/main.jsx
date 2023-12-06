@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import App from './App.jsx';
 import Home from './pages/Home.jsx';
-import Map from './components/map.jsx';
+import Map from './components/Map.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 // import Matchup from './pages/Matchup';
@@ -14,7 +14,7 @@ const router = createBrowserRouter([
   {
     path: '/',
     element: <App />,
-    errorElement: <NotFound />,
+    errorElement: <Error />,
     children: [
       {
         index: true,
