@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import GoogleMap from 'google-map-react';
 import axios from 'axios';
 
+
 // const apiKey = import.meta.env.VITE_REACT_APP_GOOGLE_MAPS_API_KEY;
 const apiKey = "AIzaSyCkYVcXLFaRDxpnHGmxVNNqgyXdXzZ8vE0"
 console.log(`This is the Api key${apiKey}`);
