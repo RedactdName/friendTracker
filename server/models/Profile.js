@@ -20,30 +20,30 @@ const profileSchema = new Schema({
     minlength: 5,
   },
   // changed 'skills' to 'friends' added _id, idea being that arraay is made up of unique ids of friends. Added 'location' w/ object of lat ,lon and username. -LE
-  friends: [
-    {
-      type: String,
-      trim: true,
-      _id: true,
-    },
-  ],
-  location: {
-    type: Object,
-    lat: {
-      type: Number,
-      required: true,
-    },
-    lon: {
-      type: Number,
-      required: true,
-    },
-  },
-  username: {
-    type: String,
-    required: true,
-    unique: true,
-    trim: true,
-  },
+  // friends: [
+  //   {
+  //     type: String,
+  //     trim: true,
+  //     _id: true,
+  //   },
+  // ],
+  // location: {
+  //   type: Object,
+  //   lat: {
+  //     type: Number,
+  //     required: true,
+  //   },
+  //   lon: {
+  //     type: Number,
+  //     required: true,
+  //   },
+  // },
+  // username: {
+  //   type: String,
+  //   required: true,
+  //   unique: true,
+  //   trim: true,
+  // },
   });
 
 
