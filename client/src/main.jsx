@@ -6,9 +6,9 @@ import Home from './pages/Home.jsx';
 import Map from './components/Map.jsx';
 import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
-// import Matchup from './pages/Matchup';
-// import Vote from './pages/Vote';
+import Profile from './pages/Profile';
 import NotFound from './pages/NotFound.jsx';
+// import ProtectedRoute from './components/protectedRoutes.jsx'
 
 const router = createBrowserRouter([
   {
@@ -28,11 +28,18 @@ const router = createBrowserRouter([
       }, {
         path: '/signup',
         element: <Signup />
+      },
+      {
+        path: '/me',
+        element:
+
+          <Profile />
+
+
+      }, {
+        path: '/profiles/:profileId',
+        element: <Profile />
       }
-      
-      //   path: '/matchup/:id',
-      //   element: <Vote />
-      // },
     ],
   },
 ]);
