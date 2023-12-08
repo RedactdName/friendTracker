@@ -4,7 +4,7 @@ import axios from 'axios';
 import Auth from '../utils/auth';
 
 const apiKey = import.meta.env.VITE_API_KEY;
-// console.log(`This is the Api key: ${apiKey}`);
+console.log(`This is the Api key: ${apiKey}`);
 
 const zoomLevel = 18
 const mapStyles = { width: '100%', height: '400px' };
@@ -49,7 +49,7 @@ const Map = () => {
         [currentUser]: location
       }));
 
-      axios.post("/update-location", {
+      axios.post("http://localhost:3001/update-location", {
         username: username,
         location: location
       })
