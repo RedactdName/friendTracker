@@ -7,9 +7,6 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true,
-    define: {
-      'process.env': process.env, // Make all environment variables available
-    },
     proxy: {
       '/graphql': {
         target: 'http://localhost:3001',
