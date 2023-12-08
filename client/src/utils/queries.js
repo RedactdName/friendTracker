@@ -24,8 +24,32 @@ export const QUERY_ME = gql`
   query me {
     me {
       _id
-      name
-      skills
+      username
+      location {
+        lat
+        lon
+      }
     }
   }
 `;
+// ________________________________________________ added by LE 
+// export const QUERY_FRIENDS = gql`
+//   query getFriends {
+//     getFriends {
+//       _id
+//       username
+//       location {
+//         lat
+//         lon
+//       }
+//     }
+//   }
+// `;
+// export const QUERY_LOCATION = gql`
+//   query getLocation {
+//     getLocation {
+//       lat
+//       lon
+//     }
+//   }
+// `;
