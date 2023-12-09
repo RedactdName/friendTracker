@@ -79,6 +79,45 @@ const resolvers = {
       }
       throw AuthenticationError;
     },
+    //This is where cody started messing with stuff
+
+    addFriend: async (parent, { profileId, friendId }, context) => {
+      console.log(context.user)
+      if (context.user) {
+        const updatedProfile = await Profile.findByIdAndUpdate(
+          profileId,
+          { $addToSet: { friends: friendId } },
+          { new: true, runValidators: true }
+        );
+        if (!updatedProfile) {
+          throw new Error('Error adding friend');
+        }
+        const token = signToken(updatedProfile);
+        return { token, profile: updatedProfile };
+      }
+      throw AuthenticationError;
+    },
+    removeFriend: async (parent, { profileId, friendId }, context) => {
+      if (context.user) {
+        return await Profile.findByIdAndUpdate(
+          profileId,
+          { $pull: { friends: friendId } },
+          { new: true }
+        );
+      }
+      throw AuthenticationError;
+    },
+    updateLocation: async (parent, { profileId, lat, lon }, context) => {
+      if (context.user) {
+        return await Profile.findByIdAndUpdate(
+          profileId,
+          { $set: { location: { lat, lon } } },
+          { new: true, runValidators: true }
+        );
+      }
+      throw AuthenticationError;
+    },
+    
   },
 };
 
