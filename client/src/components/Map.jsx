@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import GoogleMap from 'google-map-react';
 import axios from 'axios';
 import Auth from '../utils/auth';
+// import serverAuth from '../../../server/utils/auth'
 
 const apiKey = import.meta.env.VITE_API_KEY;
 // console.log(`This is the Api key: ${apiKey}`);
@@ -29,6 +30,7 @@ const Map = () => {
   const [locations, setLocations] = useState({});
   const [currentUser, setCurrentUser] = useState('');
   const [currentId, setCurrentId] = useState('');
+  console.log(import.meta.env.VITE_POSTURL)
 
   useEffect(() => {
     if (!Auth.loggedIn()) {
@@ -37,8 +39,10 @@ const Map = () => {
     }
 
     const profile = Auth.getProfile();
+    const email = profile.data.email
     const username = profile.data.name;
     const id = profile.data._id
+    // const token = serverAuth.signToken(email,username,id);
     setCurrentUser(username);
 
     const updateLocation = (currentUser, position) => {
@@ -48,11 +52,15 @@ const Map = () => {
         ...prevLocations,
         [currentUser]: location
       }));
-
-      axios.post("/update-location", {
-        username: username,
-        location: location
-      })
+//
+//    This is where we change it to just call mutation instead of post
+//
+      axios.post(`http://localhost:3001/update-location`, {
+        username: currentUser,
+        location: location,
+        id: id
+        // token : token
+    })
       .then(res => {
         if (res.status === 200) {
           console.log("Location updated successfully");
@@ -100,7 +108,9 @@ const Map = () => {
       lng={locations.lng}
     />
   );
-
+ //
+//ADD FRIEND MARKS HERE USING MAP
+ //
   return (
     <div>
       <div className='maps_container' style={containerStyle}>
