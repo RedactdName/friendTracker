@@ -1,4 +1,72 @@
-const { Schema, model } = require('mongoose');
+// const { Schema, model } = require('mongoose');
+// const bcrypt = require('bcrypt');
+
+// const profileSchema = new Schema({
+//   name: {
+//     type: String,
+//     required: true,
+//     unique: true,
+//     trim: true,
+//   },
+//   email: {
+//     type: String,
+//     required: true,
+//     unique: true,
+//     match: [/.+@.+\..+/, 'Must match an email address!'],
+//   },
+//   password: {
+//     type: String,
+//     required: true,
+//     minlength: 5,
+//   },
+//   // changed 'skills' to 'friends' added _id, idea being that arraay is made up of unique ids of friends. Added 'location' w/ object of lat ,lon and username. -LE
+//   // friends: [
+//   //   {
+//   //     type: String,
+//   //     trim: true,
+//   //     _id: true,
+//   //   },
+//   // ],
+//   // location: {
+//   //   type: Object,
+//   //   lat: {
+//   //     type: Number,
+//   //     required: true,
+//   //   },
+//   //   lon: {
+//   //     type: Number,
+//   //     required: true,
+//   //   },
+//   // },
+//   // username: {
+//   //   type: String,
+//   //   required: true,
+//   //   unique: true,
+//   //   trim: true,
+//   // },
+//   });
+
+
+// // set up pre-save middleware to create password
+// profileSchema.pre('save', async function (next) {
+//   if (this.isNew || this.isModified('password')) {
+//     const saltRounds = 10;
+//     this.password = await bcrypt.hash(this.password, saltRounds);
+//   }
+
+//   next();
+// });
+
+// // compare the incoming password with the hashed password
+// profileSchema.methods.isCorrectPassword = async function (password) {
+//   return bcrypt.compare(password, this.password);
+// };
+
+// const Profile = model('Profile', profileSchema);
+
+// module.exports = Profile;
+const mongoose = require('mongoose');
+const { Schema, model } = mongoose;
 const bcrypt = require('bcrypt');
 
 const profileSchema = new Schema({
@@ -19,35 +87,23 @@ const profileSchema = new Schema({
     required: true,
     minlength: 5,
   },
-  // changed 'skills' to 'friends' added _id, idea being that arraay is made up of unique ids of friends. Added 'location' w/ object of lat ,lon and username. -LE
-  // friends: [
-  //   {
-  //     type: String,
-  //     trim: true,
-  //     _id: true,
-  //   },
-  // ],
-  // location: {
-  //   type: Object,
-  //   lat: {
-  //     type: Number,
-  //     required: true,
-  //   },
-  //   lon: {
-  //     type: Number,
-  //     required: true,
-  //   },
-  // },
-  // username: {
-  //   type: String,
-  //   required: true,
-  //   unique: true,
-  //   trim: true,
-  // },
-  });
-
-
-// set up pre-save middleware to create password
+  friends: [
+    {
+      type: Schema.Types.ObjectId,
+      ref: 'Profile'
+    }
+  ],
+  location: {
+    lat: {
+      type: Number,
+      required: false,
+    },
+    lon: {
+      type: Number,
+      required: false,
+    },
+  }}) 
+  // // set up pre-save middleware to create password
 profileSchema.pre('save', async function (next) {
   if (this.isNew || this.isModified('password')) {
     const saltRounds = 10;
