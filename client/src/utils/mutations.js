@@ -85,14 +85,6 @@ export const ADD_FRIEND = gql`
 //   }
 // `;
 
-// export const CREATE_GROUP = gql`
-//   mutation createGroup($name: String!) {
-//     createGroup(name: $name) {
-//       _id
-//       name
-//     }
-//   }
-// `;
 
 // export const ADD_GROUP = gql`
 //   mutation addGroup($groupId: ID!) {
