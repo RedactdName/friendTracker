@@ -34,15 +34,15 @@ export const LOGIN_USER = gql`
   }
 `;
 
-export const REMOVE_SKILL = gql`
-  mutation removeSkill($skill: String!) {
-    removeSkill(skill: $skill) {
-      _id
-      name
-      skills
-    }
-  }
-`;
+// export const REMOVE_SKILL = gql`
+//   mutation removeSkill($skill: String!) {
+//     removeSkill(skill: $skill) {
+//       _id
+//       name
+//       skills
+//     }
+//   }
+// `;
 // ________________________________________________ added by LE
 // export const ADD_USER = gql`
 //   mutation addUser($name: String!, $email: String!, $password: String!, $username: String!) {
@@ -85,14 +85,6 @@ export const ADD_FRIEND = gql`
 //   }
 // `;
 
-// export const CREATE_GROUP = gql`
-//   mutation createGroup($name: String!) {
-//     createGroup(name: $name) {
-//       _id
-//       name
-//     }
-//   }
-// `;
 
 // export const ADD_GROUP = gql`
 //   mutation addGroup($groupId: ID!) {

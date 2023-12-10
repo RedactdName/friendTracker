@@ -4,11 +4,13 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
     "lint": "eslint . --ext js,jsx --report-unused-disable-directives --max-warnings 0",
     "preview": "vite preview",
-    "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\""
+    "develop": "concurrently \"cd server && npm run start\" \"cd client && npm run dev\"",
+    "seed": "cd server && npm run seed",
+    "build": "cd client && npm run build",
+    "install": "cd server && npm i && cd ../client && npm i",
+    "render-build":"npm install && npm run build"
   },
   "dependencies": {
     "@apollo/client": "^3.7.14",
