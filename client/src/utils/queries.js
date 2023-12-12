@@ -33,18 +33,18 @@ export const QUERY_ME = gql`
   }
 `;
 // ________________________________________________ added by LE 
-// export const QUERY_FRIENDS = gql`
-//   query getFriends {
-//     getFriends {
-//       _id
-//       username
-//       location {
-//         lat
-//         lon
-//       }
-//     }
-//   }
-// `;
+export const QUERY_FRIENDS = gql`
+  query getFriends {
+    getFriends {
+      _id
+      username
+      location {
+        lat
+        lon
+      }
+    }
+  }
+`;
 // export const QUERY_LOCATION = gql`
 //   query getLocation {
 //     getLocation {
