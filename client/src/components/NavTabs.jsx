@@ -56,6 +56,9 @@ function NavTabs() {
           <li className="nav-item">
             <Link to="/map" className={currentPage === '/map' ? 'nav-link active' : 'nav-link'}>Map</Link>
           </li>
+          <li className="nav-item">
+            <Link to="/friends" className={currentPage === '/friends' ? 'nav-link active' : 'nav-link'}>Friends</Link>
+          </li>
         </ul>
       </div>
     </nav>
