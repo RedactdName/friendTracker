@@ -20,6 +20,7 @@ const ProfileList = ({ profiles, title }) => {
                     friend
                     {profile.friends && profile.friends.length === 1 ? '' : 's'}
                   </span>
+
                 </h4>
               </div>
             </div>
