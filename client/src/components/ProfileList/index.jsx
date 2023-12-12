@@ -14,7 +14,13 @@ const ProfileList = ({ profiles, title }) => {
             <div key={profile._id} className="col-12 col-xl-6">
               <div className="card mb-3">
                 <h4 className="card-header bg-dark text-light p-2 m-0">
-                  {profile.name} 
+                  {profile.name} <br />
+                  <span className="text-white" style={{ fontSize: '1rem' }}>
+                    currently has {profile.friends ? profile.friends.length : 0}{' '}
+                    friend
+                    {profile.friends && profile.friends.length === 1 ? '' : 's'}
+                  </span>
+
                 </h4>
               </div>
             </div>
