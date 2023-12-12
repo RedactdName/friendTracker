@@ -8,6 +8,7 @@ import Login from './pages/Login.jsx';
 import Signup from './pages/Signup.jsx';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound.jsx';
+import FriendList from './pages/Friends.jsx';
 // import ProtectedRoute from './components/protectedRoutes.jsx'
 
 const router = createBrowserRouter([
@@ -32,14 +33,15 @@ const router = createBrowserRouter([
       {
         path: '/me',
         element:
-
           <Profile />
-
-
       }, {
         path: '/profiles/:profileId',
         element: <Profile />
       }
+    , {
+      path: '/friends',
+      element: <FriendList />
+    }
     ],
   },
 ]);

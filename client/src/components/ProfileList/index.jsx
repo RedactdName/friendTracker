@@ -20,14 +20,8 @@ const ProfileList = ({ profiles, title }) => {
                     friend
                     {profile.friends && profile.friends.length === 1 ? '' : 's'}
                   </span>
-                </h4>
 
-                <Link
-                  className="btn btn-block btn-squared btn-light text-dark"
-                  to={`/profiles/${profile._id}`}
-                >
-                  View their friends.
-                </Link>
+                </h4>
               </div>
             </div>
           ))}
