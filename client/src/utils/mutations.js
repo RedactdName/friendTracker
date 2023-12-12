@@ -98,18 +98,17 @@ export const ADD_FRIEND = gql`
 //   }
 // `;
 
-// export const UPDATE_LOCATION = gql`
-//   mutation updateLocation($lat: Float!, $lon: Float!) {
-//     updateLocation(lat: $lat, lon: $lon) {
-//       _id
-//       name
-//       location {
-//         lat
-//         lon
-//       }
-//     }
-//   }
-// `;
+export const UPDATE_LOCATION = gql`
+mutation updateLocation($profileId: ID!, $lat: Float!, $lon: Float!) {
+  updateLocation(profileId: $profileId, lat: $lat, lon: $lon) {
+    _id
+    location {
+      lat
+      lon
+    }
+  }
+}
+`;
 
 // export const UPDATE_USER = gql`
 //   mutation updateUser($name: String!, $email: String!, $password: String!) {

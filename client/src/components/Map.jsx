@@ -1,36 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import GoogleMap from 'google-map-react';
-import axios from 'axios';
 import Auth from '../utils/auth';
-// import serverAuth from '../../../server/utils/auth'
-
-const apiKey = import.meta.env.VITE_API_KEY;
-// console.log(`This is the Api key: ${apiKey}`);
-
-const zoomLevel = 18
-const mapStyles = { width: '100%', height: '400px' };
-const containerStyle = {
-  position: "relative",
-  width: "100%",
-  height: "400px",
-  marginTop: "5rem"
-};
-const markerStyle = { height: '50px', width: '50px', marginTop: '-50px' };
-const imgStyle = { height: '75%' };
-
-const Marker = ({ title, lat, lng }) => (
-  <div style={markerStyle}>
-    <img style={imgStyle} src="https://res.cloudinary.com/og-tech/image/upload/v1545236805/map-marker_hfipes.png" alt={title} />
-    <h3>{title}</h3>
-  </div>
-);
+import { useMutation, gql } from '@apollo/client';
+import { UPDATE_LOCATION } from '../utils/mutations';
 
 const Map = () => {
+  const [sendLocation] = useMutation(UPDATE_LOCATION);
+  const apiKey = import.meta.env.VITE_API_KEY;
+
   const [center, setCenter] = useState({ lat: 5.6219868, lng: -0.23223 });
   const [locations, setLocations] = useState({});
   const [currentUser, setCurrentUser] = useState('');
   const [currentId, setCurrentId] = useState('');
-  console.log(import.meta.env.VITE_POSTURL)
 
   useEffect(() => {
     if (!Auth.loggedIn()) {
@@ -39,35 +20,35 @@ const Map = () => {
     }
 
     const profile = Auth.getProfile();
-    const email = profile.data.email
-    const username = profile.data.name;
-    const id = profile.data._id
-    // const token = serverAuth.signToken(email,username,id);
-    setCurrentUser(username);
+    setCurrentUser(profile.data.name);
+    setCurrentId(profile.data._id);
 
-    const updateLocation = (currentUser, position) => {
+    const updateLocation = async (currentUser, position) => {
       let location = { lat: position.coords.latitude, lng: position.coords.longitude };
       setCenter(location);
       setLocations(prevLocations => ({
         ...prevLocations,
         [currentUser]: location
       }));
-//
-//    This is where we change it to just call mutation instead of post
-//
-      axios.post(`http://localhost:3001/update-location`, {
-        username: currentUser,
-        location: location,
-        id: id
-        // token : token
-    })
-      .then(res => {
-        if (res.status === 200) {
-          console.log("Location updated successfully");
+
+      try {
+        const response = await sendLocation({
+          variables: {
+            profileId:profile.data._id,
+            lat: location.lat,
+            lon: location.lng 
+          }
+        });
+    
+
+        if (response.data) {
+          console.log("Location updated successfully ", response.data);
         }
-        setLocations(location)
-      })
-      .catch(err => console.error(err));
+      } catch (error) {
+        console.error("Error updating location", error); 
+        console.log(JSON.stringify(error, null, 2));
+
+      }
     };
 
     const getLocation = () => {
@@ -87,39 +68,42 @@ const Map = () => {
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
-        alert("Geolocation is not supported by this browser.");
       }
     };
 
-    getLocation(); // Initial location fetch
+    getLocation();
 
-    const locationUpdateInterval = setInterval(getLocation, 5000); // Update location every 5 seconds
+    const locationUpdateInterval = setInterval(getLocation, 5000);
 
     return () => {
-      clearInterval(locationUpdateInterval); // Cleanup interval on component unmount
+      clearInterval(locationUpdateInterval);
     };
-  }, [currentUser]);
+  }, [currentUser, sendLocation, currentId]);
 
-  let locationMarker =  (
+  const Marker = ({ title, lat, lng }) => (
+    <div style={{ height: '50px', width: '50px', marginTop: '-50px' }}>
+      <img style={{ height: '75%' }} src="https://res.cloudinary.com/og-tech/image/upload/v1545236805/map-marker_hfipes.png" alt={title} />
+      <h3>{title}</h3>
+    </div>
+  );
+
+  let locationMarker = (
     <Marker
       key={currentId}
-      title= {`${currentUser}'s location`}
+      title={`${currentUser}'s location`}
       lat={locations.lat}
       lng={locations.lng}
     />
   );
- //
-//ADD FRIEND MARKS HERE USING MAP
- //
+
   return (
     <div>
-      <div className='maps_container' style={containerStyle}>
+      <div className='maps_container' style={{ position: "relative", width: "100%", height: "400px", marginTop: "5rem" }}>
         <GoogleMap
-          style={mapStyles}
           bootstrapURLKeys={{ key: apiKey }}
-          containerStyle={containerStyle}
           center={center}
-          zoom={zoomLevel}
+          zoom={18}
+          style={{ width: '100%', height: '400px' }}
         >
           {locationMarker}
         </GoogleMap>
