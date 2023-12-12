@@ -30,6 +30,7 @@ export const QUERY_ME = gql`
         lat
         lon
       }
+      friends
     }
   }
 `;

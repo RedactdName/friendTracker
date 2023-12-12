@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import GoogleMap from 'google-map-react';
 import Auth from '../utils/auth';
-import { useMutation, gql } from '@apollo/client';
+import { useMutation, useQuery, gql } from '@apollo/client';
 import { UPDATE_LOCATION } from '../utils/mutations';
+import { QUERY_SINGLE_PROFILE } from '../utils/queries';
 
 const Map = () => {
   const [sendLocation] = useMutation(UPDATE_LOCATION);
@@ -12,16 +13,45 @@ const Map = () => {
   const [locations, setLocations] = useState({});
   const [currentUser, setCurrentUser] = useState('');
   const [currentId, setCurrentId] = useState('');
+  const [friends, setFriends] = useState([]);
 
+  // Extract profileId and check its validity
+  const profile = Auth.getProfile();
+  const profileId = profile?.data?._id;
+  if (!profileId) {
+    console.error('No profileId found. User might not be logged in properly.');
+  } else {
+    console.log(`Fetching profile for ID: ${profileId}`);
+  }
+
+  const { loading, error, data } = useQuery(QUERY_SINGLE_PROFILE, {
+    variables: { profileId: profileId },
+    skip: !profileId,
+    fetchPolicy: 'network-only'
+  });
   useEffect(() => {
     if (!Auth.loggedIn()) {
       console.log('User not logged in');
       return;
     }
 
-    const profile = Auth.getProfile();
-    setCurrentUser(profile.data.name);
-    setCurrentId(profile.data._id);
+    if (loading) {
+      console.log('Loading profile...');
+      return;
+    }
+
+    if (error) {
+      console.error('Error fetching profile:', error);
+      return;
+    }
+
+    if (data) {
+      console.log('Query data received:', data);
+      setCurrentUser(data.profile?.name || '');
+      setCurrentId(data.profile?._id || '');
+    } else {
+      console.log('No data received from the query');
+    }
 
     const updateLocation = async (currentUser, position) => {
       let location = { lat: position.coords.latitude, lng: position.coords.longitude };
@@ -31,32 +61,32 @@ const Map = () => {
         [currentUser]: location
       }));
 
+      if (!currentId) {
+        console.error('Current ID is not set. Cannot update location.');
+        return;
+      }
+
       try {
         const response = await sendLocation({
           variables: {
-            profileId:profile.data._id,
+            profileId: currentId,
             lat: location.lat,
             lon: location.lng 
           }
         });
-    
 
         if (response.data) {
-          console.log("Location updated successfully ", response.data);
+          console.log("Location updated successfully", response.data);
         }
       } catch (error) {
-        console.error("Error updating location", error); 
-        console.log(JSON.stringify(error, null, 2));
-
+        console.error("Error updating location", error);
       }
     };
 
     const getLocation = () => {
       if ("geolocation" in navigator) {
         navigator.geolocation.getCurrentPosition(
-          position => {
-            updateLocation(currentUser, position);
-          },
+          position => updateLocation(currentUser, position),
           error => {
             console.error(`Geolocation Error: ${error.code} - ${error.message}`);
           },
@@ -65,20 +95,23 @@ const Map = () => {
             timeout: 5000,
             maximumAge: 0
           }
+          
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
       }
+      if(data){
+        setFriends(data.profile.friends)
+        console.log(friends)
+      }
+      
     };
 
     getLocation();
-
     const locationUpdateInterval = setInterval(getLocation, 5000);
 
-    return () => {
-      clearInterval(locationUpdateInterval);
-    };
-  }, [currentUser, sendLocation, currentId]);
+    return () => clearInterval(locationUpdateInterval);
+  }, [loading, error, data, sendLocation, currentId, currentUser]);
 
   const Marker = ({ title, lat, lng }) => (
     <div style={{ height: '50px', width: '50px', marginTop: '-50px' }}>
@@ -91,8 +124,8 @@ const Map = () => {
     <Marker
       key={currentId}
       title={`${currentUser}'s location`}
-      lat={locations.lat}
-      lng={locations.lng}
+      lat={locations[currentUser]?.lat}
+      lng={locations[currentUser]?.lng}
     />
   );
 
