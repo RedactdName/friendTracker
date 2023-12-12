@@ -5,7 +5,7 @@ export const QUERY_PROFILES = gql`
     profiles {
       _id
       name
-      skills
+      friends
     }
   }
 `;
@@ -15,7 +15,7 @@ export const QUERY_SINGLE_PROFILE = gql`
     profile(profileId: $profileId) {
       _id
       name
-      skills
+      friends
     }
   }
 `;
