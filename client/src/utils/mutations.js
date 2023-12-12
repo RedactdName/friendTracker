@@ -29,7 +29,7 @@ export const LOGIN_USER = gql`
 // ________________________________________________ added by LE
 
 export const ADD_FRIEND = gql`
-  mutation addFriend($friendId: ID!, profileId: ID!) {
+  mutation addFriend($friendId: ID!, $profileId: ID!) {
     addFriend(friendId: $friendId, profileId: $profileId) {
       _id
       name
@@ -39,7 +39,7 @@ export const ADD_FRIEND = gql`
 `;
 
 export const REMOVE_FRIEND = gql`
-  mutation removeFriend($friendId: ID!, profileId: ID!) {
+  mutation removeFriend($friendId: ID!, $profileId: ID!) {
     removeFriend(friendId: $friendId, profileId: $profileId) {
       _id
       name
@@ -49,7 +49,7 @@ export const REMOVE_FRIEND = gql`
 `;
 
 export const REMOVE_USER = gql`
-  mutation removeUser($userId: ID!, profileId: ID!) {
+  mutation removeUser($userId: ID!, $profileId: ID!) {
     removeUser(userId: $userId, profileId: $profileId) {
       _id
       name
