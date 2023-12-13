@@ -1,2 +1,0 @@
-VITE_REACT_APP_GOOGLE_MAPS_API_KEY="AIzaSyCkYVcXLFaRDxpnHGmxVNNqgyXdXzZ8vE0"
-MONGOMONGODB_URI="mongodb+srv://cody:priity1@friendtracker.ibpmp4t.mongodb.net/"

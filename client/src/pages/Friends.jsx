@@ -54,7 +54,7 @@ const Friends = () => {
                 const friendId = getIdByEmail(addedUser.email);
                 console.log(friendId)
                 if (friendId) {
-    
+
                     let isAlreadyFriend = false;
                     for (let i = 0; i < profiles.length; i++) {
                         if (profiles[i]._id === friendId && profiles[i].friends.includes(profile.data._id)) {
@@ -68,6 +68,7 @@ const Friends = () => {
                         return;
                     }
     
+
                     await addFriend({
                         variables: { 
                             profileId: friendId,
@@ -75,6 +76,7 @@ const Friends = () => {
                         },
                     });
     
+
                     await addFriend({
                         variables: { 
                             profileId: profile.data._id,
