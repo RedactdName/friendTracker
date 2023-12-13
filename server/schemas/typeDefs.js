@@ -56,6 +56,7 @@ const typeDefs = `
     profiles: [Profile]!
     profile(profileId: ID!): Profile
     me: Profile
+    profilesByIds(profileIds: [ID!]!): [Profile]
   }
 
   type Mutation {

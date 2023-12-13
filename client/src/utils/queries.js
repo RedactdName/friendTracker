@@ -17,6 +17,10 @@ export const QUERY_SINGLE_PROFILE = gql`
       _id
       name
       friends
+      location {
+        lat
+        lon
+      }
     }
   }
 `;
@@ -30,22 +34,35 @@ export const QUERY_ME = gql`
         lat
         lon
       }
+      friends
+    }
+  }
+`;
+export const QUERY_MULTIPLE_PROFILES = gql`
+  query QueryMultipleProfiles($profileIds: [ID!]!) {
+    profilesByIds(profileIds: $profileIds) {
+      _id
+      name
+      location {
+        lat
+        lon
+      }
     }
   }
 `;
 // ________________________________________________ added by LE 
-// export const QUERY_FRIENDS = gql`
-//   query getFriends {
-//     getFriends {
-//       _id
-//       username
-//       location {
-//         lat
-//         lon
-//       }
-//     }
-//   }
-// `;
+export const QUERY_FRIENDS = gql`
+  query getFriends {
+    getFriends {
+      _id
+      username
+      location {
+        lat
+        lon
+      }
+    }
+  }
+`;
 // export const QUERY_LOCATION = gql`
 //   query getLocation {
 //     getLocation {
