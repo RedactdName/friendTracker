@@ -11,25 +11,29 @@ const Friends = () => {
     const profiles = data?.profiles || [];
     console.log(profiles)
     const [addedUser, setAddedUser] = useState({ email: '' });
-    const [addFriend, { error, data: friendData }] = useMutation(ADD_FRIEND);;
+    const [addFriend, { error, data: friendData }] = useMutation(ADD_FRIEND);
     const [currentId, setCurrentId] = useState('');
 
-    const friends = []
+    const friends = [];
     function getFriends() {
+        const friendsList = [];
         for (let i = 0; i < profiles.length; i++) {
             if (profiles[i].friends.includes(currentId)) {
-                friends.push(profiles[i])
+                friendsList.push(profiles[i]);
             }
         }
+        return friendsList;
     }
+
     function getIdByEmail(email) {
         for (let i = 0; i < profiles.length; i++) {
             if (profiles[i].email === email) {
-                console.log(profiles[i]._id)
+                return profiles[i]._id;
             }
         }
+        return null; 
     }
-    // update state based on form input changes
+
     const handleChange = (event) => {
         const { name, value } = event.target;
 
@@ -38,26 +42,60 @@ const Friends = () => {
             [name]: value
         });
     };
-    // submit form
-    const handleFormSubmit = async (event) => {
-        if (Auth.loggedIn) {
-            const currentUser = Auth.getProfile();
-            setCurrentId(profile.data._id)
 
-            event.preventDefault();
+    const handleFormSubmit = async (event) => {
+        event.preventDefault();
+        if (Auth.loggedIn()) {
+            const profile = Auth.getProfile();
+            setCurrentId(profile.data._id)
+    
             console.log(addedUser);
             try {
                 const friendId = getIdByEmail(addedUser.email);
-                const { data } = await addFriend({
-                    variables: { friendId },
-                });
+                console.log(friendId)
+                if (friendId) {
+                    // Check if the user is already in the friend's friend list
+                    let isAlreadyFriend = false;
+                    for (let i = 0; i < profiles.length; i++) {
+                        if (profiles[i]._id === friendId && profiles[i].friends.includes(profile.data._id)) {
+                            isAlreadyFriend = true;
+                            break;
+                        }
+                    }
+    
+                    if (isAlreadyFriend) {
+                        alert('Cannot add friend as they are already in your friend list.');
+                        return;
+                    }
+    
+                    // Add the current user to the friend's friend list
+                    await addFriend({
+                        variables: { 
+                            profileId: friendId,
+                            friendId: profile.data._id
+                        },
+                    });
+    
+                    // Add the friend to the current user's friend list
+                    await addFriend({
+                        variables: { 
+                            profileId: profile.data._id,
+                            friendId: friendId
+                        },
+                    });
+    
+                    alert('Friend added!')
+                } else {
+                    alert('Email not found');
+                }
             } catch (e) {
                 console.error(e);
             }
+        } else {
+            alert('You must be logged in to add a friend.');
         }
-
-        // clear form values
-        setAddedUser('');
+    
+        setAddedUser({ email: '' });
     };
     return (
         <main>
@@ -66,15 +104,13 @@ const Friends = () => {
                     {loading ? (
                         <div>Loading...</div>
                     ) : (
-                        <ProfileList
-                            profiles={profiles}
-                        />
+                        <ProfileList profiles={profiles} />
                     )}
                 </div>
                 <form onSubmit={handleFormSubmit}>
                     <input
                         className="form-input"
-                        placeholder="Friends email"
+                        placeholder="Friend's email"
                         name="email"
                         type="email"
                         value={addedUser.email}
@@ -92,4 +128,6 @@ const Friends = () => {
         </main>
     );
 };
+
 export default Friends;
+ 

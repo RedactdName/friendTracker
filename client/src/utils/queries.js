@@ -17,6 +17,10 @@ export const QUERY_SINGLE_PROFILE = gql`
       _id
       name
       friends
+      location {
+        lat
+        lon
+      }
     }
   }
 `;
@@ -31,6 +35,18 @@ export const QUERY_ME = gql`
         lon
       }
       friends
+    }
+  }
+`;
+export const QUERY_MULTIPLE_PROFILES = gql`
+  query QueryMultipleProfiles($profileIds: [ID!]!) {
+    profilesByIds(profileIds: $profileIds) {
+      _id
+      name
+      location {
+        lat
+        lon
+      }
     }
   }
 `;

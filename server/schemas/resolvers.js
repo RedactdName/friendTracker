@@ -6,6 +6,19 @@ const resolvers = {
     profiles: async () => {
       return Profile.find();
     },
+    profilesByIds: async (parent, { profileIds }) => {
+      console.log("Received profile IDs: ", profileIds);
+      try {
+        const profiles = await Profile.find({
+          '_id': { $in: profileIds }
+        });
+        console.log("Found profiles: ", profiles);
+        return profiles;
+      } catch (error) {
+        console.error("Error in profilesByIds resolver: ", error);
+        throw new Error("Error fetching profiles");
+      }
+    },
 
     profile: async (parent, { profileId }) => {
       return Profile.findOne({ _id: profileId });

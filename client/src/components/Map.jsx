@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import GoogleMap from 'google-map-react';
 import Auth from '../utils/auth';
-import { useMutation, useQuery, gql } from '@apollo/client';
+import { useMutation, useQuery, useLazyQuery, gql } from '@apollo/client';
 import { UPDATE_LOCATION } from '../utils/mutations';
 import { QUERY_SINGLE_PROFILE } from '../utils/queries';
+import { useNavigate } from 'react-router-dom';
+import breadMarker from '../assets/bread.svg';
 
 const Map = () => {
+  const navigate = useNavigate();
   const [sendLocation] = useMutation(UPDATE_LOCATION);
   const apiKey = import.meta.env.VITE_API_KEY;
 
@@ -14,8 +17,21 @@ const Map = () => {
   const [currentUser, setCurrentUser] = useState('');
   const [currentId, setCurrentId] = useState('');
   const [friends, setFriends] = useState([]);
+  const [friendProfiles, setFriendProfiles] = useState({});
+  const [currentFriendIndex, setCurrentFriendIndex] = useState(0);
 
-  // Extract profileId and check its validity
+  const [getFriendProfile] = useLazyQuery(QUERY_SINGLE_PROFILE, {
+    onCompleted: (data) => {
+      console.log('Friend profile data received:', data);
+      setFriendProfiles(prev => ({ ...prev, [data.profile._id]: data.profile }));
+      // Fetch next friend profile after current one is received
+      if (currentFriendIndex < friends.length - 1) {
+        setCurrentFriendIndex(currentFriendIndex + 1);
+      }
+    },
+    fetchPolicy: 'network-only'
+  });
+
   const profile = Auth.getProfile();
   const profileId = profile?.data?._id;
   if (!profileId) {
@@ -29,9 +45,11 @@ const Map = () => {
     skip: !profileId,
     fetchPolicy: 'network-only'
   });
+
   useEffect(() => {
     if (!Auth.loggedIn()) {
       console.log('User not logged in');
+      navigate('/login');
       return;
     }
 
@@ -49,6 +67,7 @@ const Map = () => {
       console.log('Query data received:', data);
       setCurrentUser(data.profile?.name || '');
       setCurrentId(data.profile?._id || '');
+      setFriends(data.profile?.friends || []);
     } else {
       console.log('No data received from the query');
     }
@@ -71,7 +90,7 @@ const Map = () => {
           variables: {
             profileId: currentId,
             lat: location.lat,
-            lon: location.lng 
+            lon: location.lng
           }
         });
 
@@ -95,30 +114,44 @@ const Map = () => {
             timeout: 5000,
             maximumAge: 0
           }
-          
         );
       } else {
         console.error("Geolocation is not supported by this browser.");
       }
-      if(data){
-        setFriends(data.profile.friends)
-        console.log(friends)
+      if (data && data.profile && data.profile.friends) {
+        setFriends(data.profile.friends);
+        if (data.profile.friends.length > 0) {
+          setCurrentFriendIndex(0);
+        }
       }
-      
     };
+
 
     getLocation();
     const locationUpdateInterval = setInterval(getLocation, 5000);
 
     return () => clearInterval(locationUpdateInterval);
-  }, [loading, error, data, sendLocation, currentId, currentUser]);
+  }, [loading, error, data, sendLocation, currentId, currentUser, getFriendProfile]);
+  useEffect(() => {
+    if (friends.length > 0 && currentFriendIndex < friends.length) {
+      const friendId = friends[currentFriendIndex];
+      console.log('Fetching profile for friend:', friendId);
+      getFriendProfile({ variables: { profileId: friendId } });
+    }
+  }, [friends, currentFriendIndex, getFriendProfile]);
 
-  const Marker = ({ title, lat, lng }) => (
-    <div style={{ height: '50px', width: '50px', marginTop: '-50px' }}>
-      <img style={{ height: '75%' }} src="https://res.cloudinary.com/og-tech/image/upload/v1545236805/map-marker_hfipes.png" alt={title} />
-      <h3>{title}</h3>
-    </div>
-  );
+  const Marker = ({ title, lat, lng, isFriend }) => {
+    return (
+      <div style={{ position: 'absolute', transform: 'translate(-50%, -100%)', textAlign: 'center' }}>
+        <img
+          style={{ height: isFriend ? '35px' : '50px' }}
+          src={isFriend ? breadMarker : breadMarker}
+          alt={title}
+        />
+        <h3>{title}</h3>
+      </div>
+    );
+  };
 
   let locationMarker = (
     <Marker
@@ -139,10 +172,19 @@ const Map = () => {
           style={{ width: '100%', height: '400px' }}
         >
           {locationMarker}
+          {Object.values(friendProfiles).map(friend => (
+            <Marker
+              key={friend._id}
+              title={`${friend.name}'s location`}
+              lat={friend.location?.lat}
+              lng={friend.location?.lon}
+              isFriend={true}
+            />
+          ))}
         </GoogleMap>
       </div>
     </div>
   );
-};
+}
 
 export default Map;
