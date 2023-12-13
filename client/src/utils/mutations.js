@@ -59,11 +59,11 @@ export const REMOVE_USER = gql`
 
 
 export const ADD_GROUP = gql`
-  mutation addGroup($groupId: ID!) {
+  mutation addGroup($profileId: ID!, $friendId: ID!) {
     addGroup(groupId: $groupId) {
       _id
+      groupId
       name
-      groups
     }
   }
 `;
@@ -99,21 +99,3 @@ mutation updateLocation($profileId: ID!, $lat: Float!, $lon: Float!) {
 }
 `;
 
-// export const UPDATE_USER = gql`
-//   mutation updateUser($name: String!, $email: String!, $password: String!) {
-//     updateUser(name: $name, email: $email, password: $password) {
-//       _id
-//       name
-//     }
-//   }
-// `;
-
-// export const UPDATE_USERNAME = gql`
-//   mutation updateUsername($username: String!) {
-//     updateUsername(username: $username) {
-//       _id
-//       name
-//       username
-//     }
-//   }
-// `;
