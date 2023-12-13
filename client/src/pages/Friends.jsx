@@ -54,7 +54,7 @@ const Friends = () => {
                 const friendId = getIdByEmail(addedUser.email);
                 console.log(friendId)
                 if (friendId) {
-                    // Check if the user is already in the friend's friend list
+    
                     let isAlreadyFriend = false;
                     for (let i = 0; i < profiles.length; i++) {
                         if (profiles[i]._id === friendId && profiles[i].friends.includes(profile.data._id)) {
@@ -68,7 +68,6 @@ const Friends = () => {
                         return;
                     }
     
-                    // Add the current user to the friend's friend list
                     await addFriend({
                         variables: { 
                             profileId: friendId,
@@ -76,7 +75,6 @@ const Friends = () => {
                         },
                     });
     
-                    // Add the friend to the current user's friend list
                     await addFriend({
                         variables: { 
                             profileId: profile.data._id,
