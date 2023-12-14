@@ -32,7 +32,7 @@ function NavTabs() {
           {Auth.loggedIn() ? (
             <>
               <li className="nav-item">
-                <Link className="nav-link" to="/me">
+                <Link className="nav-link" to="/friends">
                   View My Profile
                 </Link>
               </li>
@@ -41,6 +41,9 @@ function NavTabs() {
                   Logout
                 </button>
               </li>
+              <li className="nav-item">
+            <Link to="/map" className={currentPage === '/map' ? 'nav-link active' : 'nav-link'}>Map</Link>
+          </li>
             </>
           ) : (
             <>
@@ -53,9 +56,9 @@ function NavTabs() {
             </>
           )}
 
-          <li className="nav-item">
+          {/* <li className="nav-item">
             <Link to="/map" className={currentPage === '/map' ? 'nav-link active' : 'nav-link'}>Map</Link>
-          </li>
+          </li> */}
           <li className="nav-item">
             <Link to="/friends" className={currentPage === '/friends' ? 'nav-link active' : 'nav-link'}>Friends</Link>
           </li>
