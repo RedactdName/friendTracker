@@ -15,10 +15,8 @@ const Home = () => {
           {loading ? (
             <div>Loading...</div>
           ) : (
-            <ProfileList
-              profiles={profiles}
-              title="Here's the current roster of friends..."
-            />
+            < img src="../src/assets/DucksInAPark.png" alt="Rubber Ducks set in a serene park background" className='img-fluid mx-auto rounded h-25 d-inline-block'/>
+            
           )}
         </div>
       </div>
