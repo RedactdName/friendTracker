@@ -9,6 +9,7 @@ import Signup from './pages/Signup.jsx';
 import Profile from './pages/Profile';
 import NotFound from './pages/NotFound.jsx';
 import FriendList from './pages/Friends.jsx';
+import About from './pages/About.jsx';
 // import ProtectedRoute from './components/protectedRoutes.jsx'
 
 const router = createBrowserRouter([
@@ -20,6 +21,9 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <Home />
+      },{
+        path: '/about',
+        element: <About />
       }, {
         path: '/Map',
         element: <Map />
