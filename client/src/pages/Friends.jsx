@@ -104,7 +104,7 @@ const Friends = () => {
                     {loading ? (
                         <div>Loading...</div>
                     ) : (
-                        <ProfileList profiles={profiles} />
+                        <ProfileList profiles={getFriends()} />
                     )}
                 </div>
                 <form onSubmit={handleFormSubmit}>
